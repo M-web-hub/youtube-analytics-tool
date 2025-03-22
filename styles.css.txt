@@ -1,0 +1,116 @@
+/* General Styles */
+body {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  background-color: #0f0f23;
+  color: #ffffff;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: #1a1a2e;
+}
+
+.logo {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+nav a {
+  margin: 0 10px;
+  color: #00ffcc;
+  text-decoration: none;
+}
+
+.banner {
+  text-align: center;
+  padding: 50px 20px;
+  background: linear-gradient(to right, #ff7e5f, #feb47b);
+}
+
+.banner h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 48px;
+  margin: 0;
+}
+
+.banner p {
+  font-size: 18px;
+  margin: 10px 0 30px;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+#channel-input {
+  padding: 10px;
+  width: 300px;
+  border: none;
+  border-radius: 5px;
+}
+
+#search-btn {
+  padding: 10px 20px;
+  background-color: #00cc66;
+  border: none;
+  border-radius: 5px;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+#search-btn:hover {
+  background-color: #00b359;
+}
+
+#analytics-section, #charts-section {
+  padding: 20px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+.analytics-grid div {
+  background-color: #1a1a2e;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+#revenue-block {
+  background-color: #ff4d4d;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #1a1a2e;
+  margin-top: 50px;
+}
+
+footer a {
+  margin: 0 10px;
+  color: #00ffcc;
+  text-decoration: none;
+}
+
+.hidden {
+  display: none;
+}

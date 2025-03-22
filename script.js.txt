@@ -1,0 +1,88 @@
+const API_KEY = "AIzaSyBTOHVrNzZEcVAGGduYbIvHDRPMcZp8U7o";
+const channelInput = document.getElementById("channel-input");
+const searchBtn = document.getElementById("search-btn");
+const analyticsSection = document.getElementById("analytics-section");
+const chartsSection = document.getElementById("charts-section");
+const analyticsGrid = document.getElementById("analytics-grid");
+
+// RPM rates by country
+const RPM_RATES = {
+  "US": 7.53, // United States
+  "GB": 5.62, // United Kingdom
+  "NZ": 5.56, // New Zealand
+  "AE": 2.33, // United Arab Emirates
+  "PK": 2.5,  // Pakistan
+  "IN": 2.5   // India
+};
+
+// Fetch channel data
+async function fetchChannelData(query) {
+  const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=channel&key=${API_KEY}`;
+  const searchResponse = await fetch(searchUrl);
+  const searchData = await searchResponse.json();
+  const channelId = searchData.items[0].id.channelId;
+
+  const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,status,brandingSettings&id=${channelId}&key=${API_KEY}`;
+  const channelResponse = await fetch(channelUrl);
+  return await channelResponse.json();
+}
+
+// Display analytics
+function displayAnalytics(data) {
+  const snippet = data.items[0].snippet;
+  const statistics = data.items[0].statistics;
+  const brandingSettings = data.items[0].brandingSettings;
+
+  const revenue = calculateRevenue(statistics.viewCount, snippet.country);
+
+  analyticsGrid.innerHTML = `
+    <div><strong>Channel ID:</strong> ${data.items[0].id}</div>
+    <div><strong>Channel Title:</strong> ${snippet.title}</div>
+    <div><strong>Description:</strong> ${snippet.description || "N/A"}</div>
+    <div><strong>Custom URL:</strong> ${brandingSettings.channel?.customUrl || "N/A"}</div>
+    <div><strong>Subscribers:</strong> ${statistics.subscriberCount || "N/A"}</div>
+    <div><strong>Video Count:</strong> ${statistics.videoCount}</div>
+    <div><strong>Total Views:</strong> ${statistics.viewCount}</div>
+    <div><strong>Channel Creation Date:</strong> ${new Date(snippet.publishedAt).toLocaleDateString()}</div>
+    <div><strong>Country:</strong> ${snippet.country || "N/A"}</div>
+    <div><strong>Status:</strong> ${data.items[0].status.privacyStatus}</div>
+    <div id="revenue-block"><strong>Total Revenue:</strong> $${revenue.toFixed(2)}</div>
+  `;
+
+  analyticsSection.classList.remove("hidden");
+  chartsSection.classList.remove("hidden");
+  renderCharts();
+}
+
+// Calculate revenue
+function calculateRevenue(views, country) {
+  const rpm = RPM_RATES[country] || 2.5; // Default RPM for unknown countries
+  return (views * rpm) / 1000; // RPM is per 1000 views
+}
+
+// Render charts (placeholder data)
+function renderCharts() {
+  const subscriberGrowthCtx = document.getElementById("subscriber-growth").getContext("2d");
+  new Chart(subscriberGrowthCtx, {
+    type: "line",
+    data: {
+      labels: ["Jan", "Feb", "Mar", "Apr", "May"],
+      datasets: [{ label: "Subscribers", data: [100, 200, 300, 400, 500], borderColor: "#00ffcc" }]
+    }
+  });
+
+  // Add other charts similarly...
+}
+
+// Event listener for search button
+searchBtn.addEventListener("click", async () => {
+  const query = channelInput.value.trim();
+  if (!query) return;
+
+  try {
+    const data = await fetchChannelData(query);
+    displayAnalytics(data);
+  } catch (error) {
+    alert("Error fetching channel data. Please try again.");
+  }
+});
